@@ -18,20 +18,33 @@
       </van-cell-group>
     </form>
     <div class="login-btn">
-      <van-button class="btn" type="info">登陆</van-button>
+      <van-button class="btn" type="info" @click="handleLogin">登陆</van-button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'LoginIndex',
   data () {
     return {
       user: {
-        mobile: 17634950228,
-        code: 123456
+        mobile: '17634950228',
+        code: '123456'
       }
+    }
+  },
+  methods: {
+    // 点击登陆按钮
+    async handleLogin () {
+      const res = await axios({
+        method: 'POST',
+        url: 'http://toutiao.course.itcast.cn/app/v1_0/authorizations',
+        data: this.user
+      })
+      console.log(res)
     }
   }
 }
