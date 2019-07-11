@@ -42,18 +42,44 @@ export default {
       }
     }
   },
+  created () {
+    // 自定义校验规则创建
+    this.configCustomMessages()
+  },
   methods: {
     // 点击登陆按钮
     async handleLogin () {
       try {
-        const data = await login(this.user)
-        // console.log(data)
-        // 登陆成功通过 调用 mutation 更新容器中的 user 的状态（信息）
-        this.$store.commit('setUser', data)
+        // 点击登陆表单验证 验证成功。。 不成功。。。
+        this.$validator.validate().then(async valid => {
+          // 表单验证不成功
+          if (!valid) {
+            return
+          }
+          // 验证通过才发请求
+          const data = await login(this.user)
+          // console.log(data)
+          // 登陆成功通过 调用 mutation 更新容器中的 user 的状态（信息）
+          this.$store.commit('setUser', data)
+        })
       } catch (err) {
         console.log(err)
         console.log('登陆失败')
       }
+    },
+    // 自定义校验规则
+    configCustomMessages () {
+      const dict = {
+        custom: {
+          mobile: {
+            required: '手机号不能为空'
+          },
+          code: {
+            required: () => '验证码不能为空'
+          }
+        }
+      }
+      this.$validator.localize('zh_CN', dict)
     }
   }
 }
