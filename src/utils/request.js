@@ -2,7 +2,8 @@ import axios from 'axios'
 
 // 配置基础路径
 const request = axios.create({
-  baseURL: 'http://toutiao.course.itcast.cn'
+  // baseURL: 'http://toutiao.course.itcast.cn' // 局域网接口 登陆验证码123456
+  baseURL: 'http://ttapi.research.itcast.cn/' // 线上接口 登陆验证码246810
 })
 
 // 添加一个请求拦截器
