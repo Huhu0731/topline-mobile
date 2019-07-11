@@ -6,12 +6,12 @@ const USER_KEY = 'user'
 
 // 获取本地存储中的token
 export const getUser = () => {
-  return JSON.parse(Window.localStorage.getItem(USER_KEY))
+  return JSON.parse(window.localStorage.getItem(USER_KEY))
 }
 
 // 修改本地存储的信息
 export const saveUser = (data) => {
-  window.localStorage.getItem(USER_KEY, JSON.stringify(data))
+  window.localStorage.setItem(USER_KEY, JSON.stringify(data))
 }
 
 // 删除本地存储信息

@@ -41,9 +41,12 @@ export default {
     async handleLogin () {
       try {
         const data = await login(this.user)
-        console.log(data)
+        // console.log(data)
+        // 登陆成功通过 调用 mutation 更新容器中的 user 的状态（信息）
+        this.$store.commit('setUser', data)
       } catch (err) {
         console.log(err)
+        console.log('登陆失败')
       }
     }
   }
