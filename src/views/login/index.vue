@@ -24,7 +24,12 @@
       </van-cell-group>
     </form>
     <div class="login-btn">
-      <van-button class="btn" type="info" @click="handleLogin">登陆</van-button>
+      <van-button
+        class="btn"
+        type="info"
+        @click.prevent="handleLogin"
+        :loading="loginLoading"
+      >登陆</van-button>
     </div>
   </div>
 </template>
@@ -39,7 +44,8 @@ export default {
       user: {
         mobile: '17634950228',
         code: '246810'
-      }
+      },
+      loginLoading: false // 登录按钮状态
     }
   },
   created () {
@@ -49,11 +55,13 @@ export default {
   methods: {
     // 点击登陆按钮
     async handleLogin () {
+      this.loginLoading = true
       try {
         // 点击登陆表单验证 验证成功。。 不成功。。。
         this.$validator.validate().then(async valid => {
           // 表单验证不成功
           if (!valid) {
+            this.loginLoading = false
             return
           }
           // 验证通过才发请求
@@ -61,10 +69,17 @@ export default {
           // console.log(data)
           // 登陆成功通过 调用 mutation 更新容器中的 user 的状态（信息）
           this.$store.commit('setUser', data)
+          this.loginLoading = false
+          this.$router.push({
+            name: 'home'
+          })
         })
       } catch (err) {
         console.log(err)
-        console.log('登陆失败')
+        // console.log('登陆失败')
+        this.loginLoading = false
+        this.$toast.fail('登陆失败')
+        this.$toast.fail('登录失败！')
       }
     },
     // 自定义校验规则
