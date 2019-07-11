@@ -10,10 +10,15 @@ export default new Router({
       path: '/',
       component: () => import('@/views/home')
     },
-    {
+    { // 登陆页面
       name: 'login',
       path: '/login',
       component: () => import('@/views/login')
+    },
+    {
+      name: 'text',
+      path: '/text',
+      component: () => import('@/views/text')
     }
   ]
 })
