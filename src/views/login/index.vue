@@ -5,12 +5,18 @@
       <van-cell-group>
         <van-field
           v-model="user.mobile"
+          v-validate="'required'"
+          name="mobile"
+          :error-message="errors.first('mobile')"
           clearable
           label="手机号"
           placeholder="请输入手机号"
         />
         <van-field
           v-model="user.code"
+          v-validate="'required'"
+          name="code"
+          :error-message="errors.first('code')"
           type="password"
           label="密码"
           placeholder="请输入验证码"
