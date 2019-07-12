@@ -2,7 +2,10 @@
   <div>
     <van-nav-bar title="首页" fixed/>
     <van-tabs v-model="activeChannelIndex" class="channel-tabs">
-      <van-tab title="标签 1">
+      <van-tab
+       v-for="item in channels"
+       :title="item.name"
+       :key="item.id">
         <!-- 下拉刷新 -->
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
           <!-- 文章列表 -->
@@ -20,24 +23,28 @@
           </van-list>
         </van-pull-refresh>
       </van-tab>
-      <van-tab title="标签 2">内容 2</van-tab>
-      <van-tab title="标签 3">内容 3</van-tab>
-      <van-tab title="标签 4">内容 4</van-tab>
     </van-tabs>
   </div>
 </template>
 
 <script>
+import { getUserChannels } from '@/api/channel'
+
 export default {
   name: 'HomeIndex',
   data () {
     return {
       activeChannelIndex: 0, // 当前频道的激活页
+      channels: [], // 存储频道列表
       list: [],
       loading: false,
       finished: false,
       isLoading: false
     }
+  },
+  created () {
+    // 加载频道列表
+    this.loadChannels()
   },
   methods: {
     // 加载文章列表事件
@@ -62,6 +69,36 @@ export default {
         this.$toast('刷新成功')
         this.isLoading = false
       }, 500)
+    },
+    async loadChannels () {
+      /**
+       * 这里分情况
+       * 用户已登陆：加载用户的频道列表
+       * 用户未登录：是否有本地存储的频道列表
+       *        1.有    拿取本地的频道列表
+       *        2.没有  获取默认的频道列表（推荐频道
+       */
+      const { user } = this.$store.state
+      let channels = []
+      if (user) { // 用户已登陆
+        const data = await getUserChannels()
+        channels = data.channels
+      } else { // 用户未登陆
+        const localChannels = JSON.parse(window.localStorage.getItem('channels'))
+        if (localChannels) {
+          channels = localChannels
+        }
+        const data = await getUserChannels()
+        channels = data.channels
+      }
+      // 简写为
+      // const localChannels = JSON.parse(window.localStorage.getItem('channels'))
+      // if (localChannels) { // 有本地存储
+      //   channels = localChannels
+      // }
+      // const data = await getUserChannels()
+      // channels = data.channels
+      this.channels = channels
     }
   }
 }
