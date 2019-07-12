@@ -17,8 +17,7 @@
           v-validate="'required'"
           name="code"
           :error-message="errors.first('code')"
-          type="password"
-          label="密码"
+          label="验证码"
           placeholder="请输入验证码"
         />
       </van-cell-group>
@@ -79,7 +78,6 @@ export default {
         // console.log('登陆失败')
         this.loginLoading = false
         this.$toast.fail('登陆失败')
-        this.$toast.fail('登录失败！')
       }
     },
     // 自定义校验规则
