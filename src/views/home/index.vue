@@ -70,6 +70,7 @@ export default {
         this.isLoading = false
       }, 500)
     },
+    // 加载频道列表
     async loadChannels () {
       /**
        * 这里分情况
@@ -91,13 +92,14 @@ export default {
         const data = await getUserChannels()
         channels = data.channels
       }
-      // 简写为
-      // const localChannels = JSON.parse(window.localStorage.getItem('channels'))
-      // if (localChannels) { // 有本地存储
-      //   channels = localChannels
-      // }
-      // const data = await getUserChannels()
-      // channels = data.channels
+      // 修改 channels，将这个数据结构修改为满足我们使用的需求
+      // 每个频道下都有它自己的文章  下拉加载  上啦加载更多 以及是否加载完成
+      channels.forEach(item => {
+        item.article = [] // 当前频道文章列表
+        item.downPullLoading = false // 控制当前频道的下拉刷新 loading 状态
+        item.upPullLoading = false // 控制当前频道的上拉加载更多的 loading 状态
+        item.upPullFinished = false // 控制当前频道数据是否加载完毕
+      })
       this.channels = channels
     }
   }
